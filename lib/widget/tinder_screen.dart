@@ -1,5 +1,6 @@
 import 'package:catinder/navigation/routes.dart';
 import 'package:catinder/widget/cat_widget.dart';
+import 'package:catinder/widget/swipe_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../state/tinder_notifier.dart';
@@ -15,6 +16,7 @@ class TinderScreen extends StatefulWidget {
 
 class TinderScreenState extends State<TinderScreen> {
   late final TinderNotifier _notifier;
+  static const double tinderCardHeight = 500;
 
   @override
   void initState() {
@@ -30,7 +32,9 @@ class TinderScreenState extends State<TinderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    _notifier.getNewCat();
+    _notifier.initializeCats();
+    _Button buttonLike = _Button(like: true);
+    _Button buttonDislike = _Button(like: false);
 
     return TinderInheritedNotifier(
       notifier: _notifier,
@@ -65,31 +69,26 @@ class TinderScreenState extends State<TinderScreen> {
                             arguments: [_notifier.getCurrentCat()],
                           );
                         },
-                        child: Stack(
-                          children: [
-                            Center(
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 0),
-                                child: CatWidget(
-                                  height: 450,
-                                  cat: _notifier.getCurrentCat(),
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 0),
+                          child: Center(
+                            child: Stack(
+                              children: [
+                                SwipeCard(
+                                  child: CatWidget(
+                                    height: tinderCardHeight,
+                                    cat: _notifier.getNextByCurrentCat(),
+                                  ),
                                 ),
-                              ),
+                                SwipeCard(
+                                  child: CatWidget(
+                                    height: tinderCardHeight,
+                                    cat: _notifier.getCurrentCat(),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Positioned.fill(
-                              child: GestureDetector(
-                                onHorizontalDragEnd: (details) async {
-                                  if (details.primaryVelocity! > 0) {
-                                    // правый свайп
-                                    await _notifier.dislikeCat();
-                                  } else if (details.primaryVelocity! < 0) {
-                                    // левый свайп
-                                    await _notifier.likeCat();
-                                  }
-                                },
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       );
                     },
@@ -97,16 +96,7 @@ class TinderScreenState extends State<TinderScreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-                      child: _Button(like: false),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
-                      child: _Button(like: true),
-                    ),
-                  ],
+                  children: [buttonDislike, buttonLike],
                 ),
               ],
             ),
@@ -125,7 +115,7 @@ class LikedCatsWidget extends StatelessWidget {
     final notifier = TinderInheritedNotifier.of(context);
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 40, 20, 20),
+      padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
       child: ValueListenableBuilder<Tinder>(
         valueListenable: notifier,
         builder: (context, tinder, child) {
@@ -146,15 +136,12 @@ class _Button extends StatefulWidget {
 
   @override
   _ButtonState createState() {
-    return _ButtonState(like: like);
+    return _ButtonState();
   }
 }
 
 class _ButtonState extends State<_Button> {
-  final bool like;
   bool _showLikeIcon = false;
-
-  _ButtonState({required this.like});
 
   void _triggerLikeAnimation() {
     setState(() {
@@ -170,51 +157,54 @@ class _ButtonState extends State<_Button> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: AnimatedOpacity(
-            opacity: _showLikeIcon ? 1.0 : 0.0,
-            duration: Duration(milliseconds: 100),
-            child: SvgPicture.asset(
-              like
-                  ? "assets/images/calm-cat.svg"
-                  : "assets/images/angry-cat.svg",
-              height: 50,
-              width: 50,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 20, 50),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: AnimatedOpacity(
+              opacity: _showLikeIcon ? 1.0 : 0.0,
+              duration: Duration(milliseconds: 100),
+              child: SvgPicture.asset(
+                widget.like
+                    ? "assets/images/calm-cat.svg"
+                    : "assets/images/angry-cat.svg",
+                height: 50,
+                width: 50,
+              ),
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            like ? _like(context) : _dislike(context);
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.0),
+          ElevatedButton(
+            onPressed: () {
+              widget.like ? likeAction(context) : dislikeAction(context);
+            },
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              backgroundColor: Color(0xFF232323),
+              fixedSize: const Size(150, 60),
             ),
-            backgroundColor: Color(0xFF232323),
-            fixedSize: const Size(150, 60),
-          ),
-          child: Center(
-            child: Text(
-              like ? "Like" : "Dislike",
-              style: TextStyle(fontSize: 25, color: Colors.white),
+            child: Center(
+              child: Text(
+                widget.like ? "Like" : "Dislike",
+                style: TextStyle(fontSize: 25, color: Colors.white),
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  void _like(BuildContext context) {
+  void likeAction(BuildContext context) {
     final notifier = TinderInheritedNotifier.of(context);
     _triggerLikeAnimation();
     notifier.likeCat();
   }
 
-  void _dislike(BuildContext context) {
+  void dislikeAction(BuildContext context) {
     final notifier = TinderInheritedNotifier.of(context);
     _triggerLikeAnimation();
     notifier.dislikeCat();

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:catinder/model/cat.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/tinder.dart';
@@ -11,7 +13,6 @@ class TinderNotifier extends ValueNotifier<Tinder> {
     notifyListeners();
   }
 
-
   Future<void> dislikeCat() async {
     getNewCat();
     notifyListeners();
@@ -19,8 +20,20 @@ class TinderNotifier extends ValueNotifier<Tinder> {
 
   Cat getCurrentCat() => value.currentCat;
 
+  // Queue<Cat> get cats => value.catGetter.cats;
+
+  Cat getNextByCurrentCat() => value.nextCat;
+
   Future<void> getNewCat() async {
+    value.catGetter.removeFirst();
     value.currentCat = (await value.catGetter.getCat());
+    value.nextCat = value.catGetter.getNextCat();
+    notifyListeners();
+  }
+
+  Future<void> initializeCats() async {
+    value.currentCat = (await value.catGetter.getCat());
+    value.nextCat = value.catGetter.getNextCat();
     notifyListeners();
   }
 

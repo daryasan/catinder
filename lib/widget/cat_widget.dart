@@ -1,13 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:catinder/model/cat.dart';
-import 'package:catinder/state/tinder_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CatWidget extends StatelessWidget {
   final double height;
   final Cat cat;
-  static final double borderWidth = 2;
+  static final double borderWidth = 1;
   static final double borderRadius = 25;
   static final Color borderColor = Color(0xFF232323);
   static final double breedHeight = 60;
@@ -17,7 +16,7 @@ class CatWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(30, 60, 30, 10),
+      padding: EdgeInsets.fromLTRB(20, 60, 20, 0),
       child: Container(
         height: height,
         width: 500,

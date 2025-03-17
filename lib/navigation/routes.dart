@@ -1,7 +1,6 @@
 import 'package:catinder/model/cat.dart';
 import 'package:catinder/widget/cat_screen.dart';
 import 'package:catinder/widget/tinder_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 abstract class RouteNames {

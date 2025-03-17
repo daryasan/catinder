@@ -14,21 +14,26 @@ class CatGetter {
     _getCats(_max_length);
   }
 
-  Cat getOneCat() {
-    return _cats.first;
-  }
+  Queue<Cat> get cats => _cats;
 
   Future<Cat> getCat() async {
     if (_cats.length < 3) {
       await _getCats(_max_length - _cats.length);
     }
     Cat cat = _cats.first;
-    _cats.removeFirst();
+    //_cats.removeFirst();
     return cat;
   }
 
+  Cat removeFirst(){
+    return _cats.removeFirst();
+  }
 
+  Cat getNextCat() {
+    return _cats.elementAt(1);
+  }
 
+  
   Future<void> _getCats(int numberOfCats) async {
     final url = Uri.parse(
       'https://api.thecatapi.com/v1/images/search?has_breeds=1&limit=$numberOfCats',
@@ -42,13 +47,13 @@ class CatGetter {
         final cat = data[i];
         final breed =
             cat["breeds"].isNotEmpty ? cat["breeds"][0] : "Some Breed";
-        Cat cat_i = Cat(
+        Cat catI = Cat(
           breed: breed["name"],
           image: cat["url"],
           description:
               breed != null ? breed['description'] : 'No details available.',
         );
-        _cats.add(cat_i);
+        _cats.add(catI);
       }
     } else {
       print('Error fetching cat data: ${response.statusCode}');

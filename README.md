@@ -1,16 +1,23 @@
 # catinder
 
-A new Flutter project.
+Домашнее задание по курсу разработки на flutter от Яндекса. Авторка - Судакова Дарья.
 
-## Getting Started
+## Описание 
+Catinder - аналог тиндера для любителей котиков. Надоело искать пару в настоящем тиндере? Выбери, какого котика завести с помощью Catinder.
+Приложение позволяет свайпать разные породы котиков вправо - лайкать, - или влево - дизлайкать, - а также смотрнть более детальное описание пород.
+Надеюсь, все котики будут залайканы.
 
-This project is a starting point for a Flutter application.
+## Getting started 
 
-A few resources to get you started if this is your first Flutter project:
+## Реализованные фичи 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. На главном экране отображается изображение котика и его порода, ниже находятся кнопки "лайк" и "дизлайк". 
+2. Котиков можно свайпать влево (эквивалентно нажатию кнопки дизлайк) и вправо (эквивалентно нажатию кнопки лайк).
+3. После свайпа/нажатия на кнопку котик сменяется на нового случайного.
+4. Есть счетчик лайкнутых котиков, отображается вверху (Liked cats)
+5. При нажатии на котика открывается экран с детальным описанием и информацией про породу.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Cat API
+Информация о котиках берется из (Cat API)[https://thecatapi.com] с помощью search search?has_breeds=1&limit=15. Котики подгружаются из очереди.
+
+
