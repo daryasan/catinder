@@ -11,7 +11,6 @@ abstract class RouteNames {
 }
 
 class RoutesBuilder {
-
   static Route<Object?>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.home:
@@ -21,10 +20,8 @@ class RoutesBuilder {
         );
 
       case RouteNames.catDetails:
-        final args =
-            settings.arguments as List<dynamic>;
+        final args = settings.arguments as List<dynamic>;
         final cat = args[0] as Cat;
-        print(cat);
         return MaterialPageRoute(
           builder: (_) => CatScreen(cat: cat),
           settings: settings,

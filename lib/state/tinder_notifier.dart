@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:catinder/model/cat.dart';
 import 'package:flutter/cupertino.dart';
 import '../model/tinder.dart';

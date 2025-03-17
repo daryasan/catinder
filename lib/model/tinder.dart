@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:catinder/model/cat.dart';
 import 'package:catinder/model/cat_getter.dart';
 
@@ -20,7 +18,4 @@ class Tinder {
   final CatGetter catGetter = CatGetter();
 
   Tinder({int? likes}) : likes = likes ?? 0;
-
-
 }
-

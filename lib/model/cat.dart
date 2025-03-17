@@ -6,7 +6,7 @@ class Cat {
   const Cat({
     required this.breed,
     required this.description,
-    required this.image
+    required this.image,
   });
 
   @override
