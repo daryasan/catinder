@@ -43,14 +43,14 @@ class SwipeCardState extends State<SwipeCard> {
   void _onPanEnd() async {
     final notifier = TinderInheritedNotifier.of(context);
 
-    if (!_position.dx.isNegative && _position.dx.abs() >= screenWidth / 3) {
+    if (!_position.dx.isNegative && _position.dx.abs() >= screenWidth / 4) {
       _position = Offset.zero;
       await Future.delayed(_animationDuration);
       notifier.likeCat();
       return;
     }
 
-    if (_position.dx.isNegative && _position.dx.abs() >= screenWidth / 3) {
+    if (_position.dx.isNegative && _position.dx.abs() >= screenWidth / 4) {
       _position = Offset.zero;
       await Future.delayed(_animationDuration);
       notifier.dislikeCat();

@@ -16,7 +16,9 @@ class TinderScreen extends StatefulWidget {
 
 class TinderScreenState extends State<TinderScreen> {
   late final TinderNotifier _notifier;
-  static const double tinderCardHeight = 500;
+  late double tinderCardHeight;
+
+  double get screenWidth => MediaQuery.sizeOf(context).width;
 
   @override
   void initState() {
@@ -35,6 +37,7 @@ class TinderScreenState extends State<TinderScreen> {
     _notifier.initializeCats();
     _Button buttonLike = _Button(like: true);
     _Button buttonDislike = _Button(like: false);
+    tinderCardHeight = screenWidth * 1.1;
 
     return TinderInheritedNotifier(
       notifier: _notifier,
