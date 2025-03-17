@@ -31,6 +31,6 @@ https://disk.yandex.ru/d/v0Hcsyq5orugeg
 ![img_3.png](img_3.png)
 
 ## Cat API
-Информация о котиках берется из (Cat API)[https://thecatapi.com] с помощью search search?has_breeds=1&limit=15. Котики подгружаются из очереди.
+Информация о котиках берется из [Cat API](https://thecatapi.com) с помощью search search?has_breeds=1&limit=15. Котики подгружаются из очереди.
 
 
