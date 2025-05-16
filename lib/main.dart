@@ -1,8 +1,14 @@
+import 'package:catinder/model/tinder.dart';
 import 'package:catinder/navigation/routes.dart';
+import 'package:catinder/state/tinder_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => TinderNotifier(Tinder()),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

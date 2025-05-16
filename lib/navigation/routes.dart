@@ -1,6 +1,7 @@
 import 'package:catinder/model/cat.dart';
-import 'package:catinder/widget/cat_screen.dart';
-import 'package:catinder/widget/tinder_screen.dart';
+import 'package:catinder/screens/cat_screen.dart';
+import 'package:catinder/screens/liked_cats_screen.dart';
+import 'package:catinder/screens/tinder_screen.dart';
 import 'package:flutter/material.dart';
 
 abstract class RouteNames {
@@ -8,6 +9,7 @@ abstract class RouteNames {
 
   static const home = '/';
   static const catDetails = 'cat';
+  static const likedCats = 'liked';
 }
 
 class RoutesBuilder {
@@ -24,6 +26,12 @@ class RoutesBuilder {
         final cat = args[0] as Cat;
         return MaterialPageRoute(
           builder: (_) => CatScreen(cat: cat),
+          settings: settings,
+        );
+
+      case RouteNames.likedCats:
+        return MaterialPageRoute(
+          builder: (_) => LikedCatsScreen(),
           settings: settings,
         );
     }

@@ -1,8 +1,10 @@
+import 'package:catinder/data/cat_getter.dart';
 import 'package:catinder/model/cat.dart';
-import 'package:catinder/model/cat_getter.dart';
+import 'package:catinder/model/liked_cat.dart';
 
 class Tinder {
-  int likes;
+  final List<LikedCat> _likedCats = [];
+
   late Cat currentCat = Cat(
     breed: 'Loading...',
     image: 'assets/images/loading-cat.svg',
@@ -17,5 +19,8 @@ class Tinder {
 
   final CatGetter catGetter = CatGetter();
 
-  Tinder({int? likes}) : likes = likes ?? 0;
+  Tinder();
+
+  get likes => _likedCats.length;
+  get likedCats => _likedCats;
 }

@@ -1,59 +1,52 @@
 import 'package:catinder/model/cat.dart';
+import 'package:catinder/model/liked_cat.dart';
+import 'package:catinder/model/tinder.dart';
 import 'package:flutter/cupertino.dart';
-import '../model/tinder.dart';
 
-class TinderNotifier extends ValueNotifier<Tinder> {
-  TinderNotifier(super.value);
+class TinderNotifier extends ChangeNotifier {
+  final Tinder _tinder;
+
+  TinderNotifier(this._tinder);
+
+  Cat get currentCat => _tinder.currentCat;
+
+  Cat get nextCat => _tinder.nextCat;
+
+  int get likes => _tinder.likes;
+
+  List<LikedCat> get likedCats => _tinder.likedCats;
 
   Future<void> likeCat() async {
-    value.likes++;
-    getNewCat();
+    _tinder.likedCats.add(LikedCat(_tinder.currentCat, DateTime.now()));
+    await _updateCats();
     notifyListeners();
   }
 
   Future<void> dislikeCat() async {
-    getNewCat();
+    await _updateCats();
     notifyListeners();
   }
 
-  Cat getCurrentCat() => value.currentCat;
-
-  // Queue<Cat> get cats => value.catGetter.cats;
-
-  Cat getNextByCurrentCat() => value.nextCat;
-
-  Future<void> getNewCat() async {
-    value.catGetter.removeFirst();
-    value.currentCat = (await value.catGetter.getCat());
-    value.nextCat = value.catGetter.getNextCat();
+  Future<void> _updateCats() async {
+    _tinder.catGetter.removeFirst();
+    _tinder.currentCat = await _tinder.catGetter.getCat();
+    _tinder.nextCat = _tinder.catGetter.getNextCat();
     notifyListeners();
   }
 
   Future<void> initializeCats() async {
-    value.currentCat = (await value.catGetter.getCat());
-    value.nextCat = value.catGetter.getNextCat();
+    _tinder.currentCat = await _tinder.catGetter.getCat();
+    _tinder.nextCat = _tinder.catGetter.getNextCat();
     notifyListeners();
   }
 
-  int getLikes() => value.likes;
-}
+  void removeLikedCat(LikedCat likedCat) {
+    _tinder.likedCats.remove(likedCat);
+    notifyListeners();
+  }
 
-class TinderInheritedNotifier extends InheritedNotifier<TinderNotifier> {
-  const TinderInheritedNotifier({
-    super.key,
-    required super.notifier,
-    required super.child,
-  });
-
-  static TinderNotifier of(BuildContext context) {
-    final result =
-        context.dependOnInheritedWidgetOfExactType<TinderInheritedNotifier>();
-
-    final notifier = result?.notifier;
-    if (notifier == null) {
-      throw StateError('No TinderInheritedNotifier found in context');
-    }
-
-    return notifier;
+  void clearLikedCats() {
+    _tinder.likedCats.clear();
+    notifyListeners();
   }
 }
