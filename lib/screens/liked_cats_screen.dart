@@ -1,5 +1,4 @@
 import 'package:catinder/model/liked_cat.dart';
-import 'package:catinder/navigation/routes.dart';
 import 'package:catinder/state/tinder_notifier.dart';
 import 'package:catinder/widget/cat_item.dart';
 import 'package:flutter/material.dart';
