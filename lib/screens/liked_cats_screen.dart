@@ -17,6 +17,7 @@ class _LikedCatsScreenState extends State<LikedCatsScreen> {
   @override
   Widget build(BuildContext context) {
     TinderNotifier notifier = Provider.of<TinderNotifier>(context);
+    notifier.fetchLikedCats();
 
     List<String> breeds = ["All", ...notifier.likedCats.map((cat) => cat.cat.breed).toSet()];
 

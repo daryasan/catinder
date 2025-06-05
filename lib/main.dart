@@ -1,3 +1,4 @@
+import 'package:catinder/data/database.dart' as db;
 import 'package:catinder/model/tinder.dart';
 import 'package:catinder/navigation/routes.dart';
 import 'package:catinder/state/tinder_notifier.dart';
@@ -5,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  final db.AppDatabase database = db.AppDatabase();
   runApp(ChangeNotifierProvider(
-    create: (context) => TinderNotifier(Tinder()),
+    create: (context) => TinderNotifier(Tinder(), database),
     child: MyApp(),
   ));
 }

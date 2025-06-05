@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:catinder/navigation/routes.dart';
 import 'package:catinder/state/tinder_notifier.dart';
 import 'package:catinder/widget/cat_widget.dart';
@@ -53,6 +55,7 @@ class LikedCatsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TinderNotifier notifier = Provider.of<TinderNotifier>(context);
+    notifier.fetchLikedCats();
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
       child: Text(
@@ -102,10 +105,9 @@ class TinderCardsWidget extends StatelessWidget {
     return Expanded(
       child: GestureDetector(
         onTap: () async {
-          await Navigator.of(context).pushNamed(
-            RouteNames.catDetails,
-            arguments: [notifier.currentCat],
-          );
+          await Navigator.of(
+            context,
+          ).pushNamed(RouteNames.catDetails, arguments: [notifier.currentCat]);
         },
         child: Center(
           child: Stack(
@@ -187,11 +189,19 @@ class _ActionButtonState extends State<_ActionButton> {
           ),
           ElevatedButton(
             onPressed: () {
-              _triggerLikeAnimation();
-              final TinderNotifier notifier =
-              Provider.of<TinderNotifier>(context, listen: false);
-              widget.like ? notifier.likeCat() : notifier.dislikeCat();
+              final TinderNotifier notifier = Provider.of<TinderNotifier>(
+                context,
+                listen: false,
+              );
+              {
+                notifier.hasNetwork().catchError((e) => _showSnackBar());
+                _triggerLikeAnimation();
+                widget.like
+                    ? notifier.likeCat().catchError((e) => _showSnackBar())
+                    : notifier.dislikeCat().catchError((e) => _showSnackBar());
+              }
             },
+
             style: ElevatedButton.styleFrom(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0),
@@ -207,6 +217,16 @@ class _ActionButtonState extends State<_ActionButton> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showSnackBar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Проверьте подключение к сети!"),
+        backgroundColor: Colors.red,
+        duration: const Duration(seconds: 3),
       ),
     );
   }

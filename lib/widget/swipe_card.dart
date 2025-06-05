@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 class SwipeCard extends StatefulWidget {
   final Widget? child;
 
-  const SwipeCard({Key? key, this.child}) : super(key: key);
+  const SwipeCard({super.key, this.child});
 
   @override
   State<SwipeCard> createState() => SwipeCardState();

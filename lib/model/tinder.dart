@@ -3,7 +3,7 @@ import 'package:catinder/model/cat.dart';
 import 'package:catinder/model/liked_cat.dart';
 
 class Tinder {
-  final List<LikedCat> _likedCats = [];
+  List<LikedCat> likedCats = [];
 
   late Cat currentCat = Cat(
     breed: 'Loading...',
@@ -21,6 +21,5 @@ class Tinder {
 
   Tinder();
 
-  get likes => _likedCats.length;
-  get likedCats => _likedCats;
+  get likes => likedCats.length;
 }

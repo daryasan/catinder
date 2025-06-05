@@ -31,7 +31,7 @@ class _CatItemState extends State<CatItem> {
           onTap: () async {
             await Navigator.of(context).pushNamed(
               RouteNames.catDetails,
-              arguments: [notifier.currentCat],
+              arguments: [widget.cat.cat],
             );
           },
           leading: ClipRRect(

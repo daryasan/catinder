@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
@@ -25,10 +26,12 @@ class CatGetter {
   }
 
   Cat removeFirst() {
+    if (_cats.isEmpty) throw TimeoutException("Queue empty!");
     return _cats.removeFirst();
   }
 
   Cat getNextCat() {
+    if (_cats.isEmpty) throw TimeoutException("Queue empty!");
     return _cats.elementAt(1);
   }
 
